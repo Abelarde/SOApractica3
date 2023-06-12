@@ -1,0 +1,62 @@
+version: '3'
+services:
+  cliente:
+    container_name: practica_sa_cliente
+    build:
+      context: Cliente
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - '8080:4000'
+    depends_on:
+      - database
+    volumes:
+      - ./Cliente:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - Cliente/.env
+  repartidor:
+    container_name: practica_sa_repartidor
+    build:
+      context: Repartidor
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - '8081:4000'
+    depends_on:
+      - database
+    volumes:
+      - ./Repartidor:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - Repartidor/.env
+  restaurante:
+    container_name: practica_sa_restaurante
+    build:
+      context: Restaurante
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - '8082:4000'
+    depends_on:
+      - database
+    volumes:
+      - ./Restaurante:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - Restaurante/.env
+  database:
+    container_name: practica_sa_database
+    build:
+      context: db
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    restart: always
+    ports:
+      - 3307:3306
+    volumes:
+      - ./db-data:/var/lib/mysql
