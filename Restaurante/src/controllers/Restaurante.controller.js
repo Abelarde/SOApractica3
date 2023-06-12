@@ -44,6 +44,10 @@ const listoPedido = async (req, res) => {
 
     const { nombreRepartidor, noPedido } = req.body;
 
+    const connection = await  getConnection();
+    const mensaje = "Restaurante: Solicitud para informar que el pedido esta listo";
+    await connection.query("INSERT INTO Log (mensaje) values(?)", mensaje);
+
     // Realizar una solicitud al otro endpoint
     axios.post('http://localhost:8081/repartidor/recibirPedidodelRestaurante', {
         nombreRepartidor: nombreRepartidor,
