@@ -34,6 +34,19 @@ app.get('/esb/estado/repartidor/:noPedido', async (req, res) => {
     res.json(respuesta);
 });
 
+app.put('/esb/entregado', async (req, res) => {
+    const { estadoPedido, noPedido } = req.body;
+    const pedido = { estadoPedido, noPedido }; // Reemplaza nombreUsuario y producto con los datos reales que deseas enviar
+
+    try {
+        const respuesta = await axios.put('http://0.0.0.0:8081/repartidor/marcaEntregadoelPedido', pedido);
+        res.json(respuesta.data);
+    } catch (error) {
+        console.error('Error al actualizar el mensaje:', error);
+        res.status(500).json({ error: 'Error al actualizar el mensaje' });
+    }
+});
+
 // Función para enviar el mensaje a otro servicio
 async function enviarMensaje(url, mensaje) {
     try {
